@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="smallbridge.js"></script>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("one").addEventListener("click", function() {
+                SmallBridge.sendMessage("hoge");
+            });
+            document.getElementById("two").addEventListener("click", function() {
+                SmallBridge.sendMessage("");
+            });
+
+            SmallBridge.addMessageListener(function(source, data) {
+                SmallBridge.sendMessage(data);
+            });
+        }, false);
+    </script>
+</head>
+<body>
+    <button id="one">send "hoge"</button>
+    <button id="two">send ""</button>
+</body>
+</html>
