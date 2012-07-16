@@ -9,7 +9,8 @@
 
 @implementation SBWebView
 
--(void) sendMessage:(NSString*)data
+
+- (void)sendMessage:(NSString *)data
 {
     NSString* bundleId = [[NSBundle mainBundle] bundleIdentifier];
     NSString* jsString = [NSString stringWithFormat:@"SmallBridge.messageCallback(\"%@\", \"%@\");", bundleId, data];

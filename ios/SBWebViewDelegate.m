@@ -9,6 +9,10 @@
 
 @implementation SBWebViewDelegate
 
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [webView stringByEvaluatingJavaScriptFromString: @"SmallBridge.setPlatform('ios');"];
+}
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -16,9 +20,9 @@
     NSString* sbscheme = @"smallbridge://";
     NSRange range = [url rangeOfString:sbscheme];
     
-    if ( range.location != 0 )
+    if ( range.location == NSNotFound )
     {
-        return NO;
+        return YES;
     }
     else
     {
@@ -27,7 +31,7 @@
         if ( ! [self respondsToSelector:callbackSelector] )
         {
             NSLog(@"subclass of SBWebViewDelegate should implement -(BOOL)onReceiveMessage:(NSData *)source withData:(NSData *)data");
-            return NO;
+            return YES;
         }
         else
         {

@@ -10,6 +10,6 @@
 
 @interface SBWebView : UIWebView
 
--(void) sendMessage:(NSString*)data;
+-(void) sendMessage:(NSString *)data;
 
 @end
