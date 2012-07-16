@@ -9,7 +9,6 @@
 
 @implementation SBWebView
 
-
 - (void)sendMessage:(NSString *)data
 {
     NSString* bundleId = [[NSBundle mainBundle] bundleIdentifier];
