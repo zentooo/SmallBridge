@@ -12,7 +12,7 @@
     -(void) sendMessage:(NSBundle *) withData:(NSString *)data;
 
     // source is URL of loaded document
-    -(BOOL)onReceiveMessage:(NSString*)source withData:(NSString*)data;
+    -(BOOL) onReceiveMessage:(NSString*)source withData:(NSString*)data;
 
 ## for Android
     public void sendMessage(Context context, String data)
