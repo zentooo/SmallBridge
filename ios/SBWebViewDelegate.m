@@ -26,15 +26,14 @@
         
         if ( ! [self respondsToSelector:callbackSelector] )
         {
-            NSLog(@"subclass of SBWebViewDelegate should implement onReceiveMessage:withData:");
+            NSLog(@"subclass of SBWebViewDelegate should implement -(BOOL)onReceiveMessage:(NSData *)source withData:(NSData *)data");
             return NO;
         }
         else
         {
             NSString* source = [[request allHTTPHeaderFields] objectForKey:@"Referer"];
             NSString* data = [url substringFromIndex:range.length];
-            [self performSelector:callbackSelector withObject:source withObject:data];
-            return YES;
+            return (BOOL)[self performSelector:callbackSelector withObject:source withObject:data];
         }
     }
 }

@@ -1,4 +1,5 @@
 (function(win, doc) {
+    'use strict';
     var SmallBridge = {},
         scheme = "smallbridge://",
         frame = doc.createElement("iframe"),
@@ -7,40 +8,53 @@
         };
 
     if ( true ) { // with iOS
-        SmallBridge.sendMessage = function(data) {
-            frame.src = scheme + data;
-            doc.body.appendChild(frame);
-            doc.body.removeChild(frame);
-        };
+        defineProperty(SmallBridge, "sendMessage", {
+            configurable: false,
+            enumerable: false,
+            writable: false,
+            value: function(data) {
+                frame.src = scheme + data;
+                doc.body.appendChild(frame);
+                doc.body.removeChild(frame);
+            }
+        });
     }
     else { // with Android
-        win.prompt(data);
+        defineProperty(SmallBridge, "sendMessage", {
+            configurable: false,
+            enumerable: false,
+            writable: false,
+            value: function(data) {
+                win.prompt(data);
+            }
+        });
     }
 
-    defineProperty(SmallBridge, "_listeners", {
-        writable: false,
-        value: []
-    });
-
     defineProperty(SmallBridge, "addMessageListener", {
+        configurable: false,
+        enumerable: false,
         writable: false,
         value: function(listener) {
-            SmallBridge._listeners.push(listener);
-        }
-    });
-
-    defineProperty(SmallBridge, "messageCallback", {
-        writable: false,
-        value: function(source, data) {
-            SmallBridge._listeners.forEach(function(listener) {
-                listener.call(null, source, data);
+            defineProperty(SmallBridge, "_listener", {
+                writable: false,
+                value:  listener
             });
         }
     });
 
-    if ( typeof Object.freeze === "function" ) {
-        Object.freeze(SmallBridge);
-    }
+    defineProperty(SmallBridge, "messageCallback", {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: function(source, data) {
+            SmallBridge._listener(source, data);
+        }
+    });
 
-    win.SmallBridge = SmallBridge;
+    defineProperty(win, "SmallBridge", {
+        configurable: false,
+        enumerable: false,
+        writable: false,
+        value: SmallBridge
+    });
 })(this, document);
