@@ -9,7 +9,7 @@
     });
 
 ## for iOS
-    -(void) sendMessage:(NSString *)data;
+    -(void) sendMessage:(NSBundle *) withData:(NSString *)data;
 
     // source is URL of loaded document
     -(BOOL)onReceiveMessage:(NSString*)source withData:(NSString*)data;
