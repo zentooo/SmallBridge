@@ -1,7 +1,7 @@
 # Interface
 
 ## for JavaScript
-    SmallBridge.sendMesage("<string>");
+    SmallBridge.sendMessage("<string>");
 
     SmallBridge.addMessageListener(function(source, data) {
         console.log(source); // bundle ID as String
