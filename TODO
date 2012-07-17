@@ -4,7 +4,7 @@
  - RPC風に？
  - 同期・非同期のアレ？
 
- - JSON formatで文字列をやり取りし、特定の関数を叩いてhogehogeするinterface
+ - JSON formatで文字列をやり取りし、method fieldに応じてNative側の特定の関数を叩いてhogehogeするinterface
  - Nativeのregistered interfaceからJavaScriptの関数を作る？
  - NativeではRPCのマッピングを書いておく。
 
