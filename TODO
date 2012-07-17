@@ -1,2 +1,16 @@
-* iOS
- - pass NSBundle* to sendMessage of SBWebView? ( like Android )
+* all
+ - extensible interface?
+ - batch request?
+ - RPC風に？
+ - 同期・非同期のアレ？
+
+ - JSON formatで文字列をやり取りし、特定の関数を叩いてhogehogeするinterface
+ - Nativeのregistered interfaceからJavaScriptの関数を作る？
+ - NativeではRPCのマッピングを書いておく。
+
+* JS
+ - calc method signature on addMessageListener?
+ - addMessageListener -> setMessageListener?
+
+* both of Native
+ - pass the id of UIWebView / WebView to JS layer ?
