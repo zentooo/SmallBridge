@@ -6,8 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "SBJson.h"
+#import "SBResult.h"
 
 @interface SBWebViewDelegate : NSObject <UIWebViewDelegate>
+
+@property (strong, nonatomic) SBJsonParser *jsonParser;
+
+-(BOOL) onReceiveMessage:(NSString *)source type:(NSString *)type data:(NSDictionary *)data result:(SBResult *)result;
 
 @end

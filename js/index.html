@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <script type="text/javascript" src="smallbridge.js"></script>
+    <script type="text/javascript" src="smallbridge.js?v=11adso"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("one").addEventListener("click", function() {
-                SmallBridge.sendMessage("hoge");
-            });
-            document.getElementById("two").addEventListener("click", function() {
-                SmallBridge.sendMessage("");
-            });
-
-            SmallBridge.addMessageListener(function(source, data) {
-                SmallBridge.sendMessage(data);
+                SmallBridge.sendMessage("hoge", { foo: 1, bar: 2 }, function(result) {
+                    alert(result.foo);
+                    alert(result.bar);
+                });
             });
         }, false);
     </script>
