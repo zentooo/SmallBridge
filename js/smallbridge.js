@@ -1,9 +1,12 @@
 (function(win, doc) {
     'use strict';
+
     var SmallBridge = {},
-        scheme = "smallbridge://",
+        baseUri = "smallbridge://",
         frame = doc.createElement("iframe"),
-        defineProperty = Object.defineProperty || function(obj, key, desc) {
+        callbacks = {};
+
+    var defineProperty = Object.defineProperty || function(obj, key, desc) {
             obj.key = desc.value;
         },
         define = function(obj, key, value) {
@@ -15,27 +18,52 @@
             });
         };
 
+    function registerCallback(type, callback) {
+        var id;
+        if ( ! callbacks[type] ) {
+            callbacks[type] = [];
+            callbacks[type].id = 0;
+        }
+        id = callbacks[type].id++;
+        callbacks[type][id] = callback;
+        return id;
+    }
+
     define(SmallBridge, "setPlatform", function(platform) {
         if ( platform === "ios" ) { // with iOS
-            define(SmallBridge, "sendMessage", function(data) {
-                frame.src = scheme + data;
+            define(SmallBridge, "sendMessage", function(type, data, callback) {
+                var callbackId;
+                if ( typeof callback === "function" ) {
+                    callbackId = registerCallback(type, callback);
+                }
+
+                frame.src = baseUri + JSON.stringify({
+                    type: type,
+                    data: data,
+                    callbackId: callbackId
+                });
                 doc.body.appendChild(frame);
                 doc.body.removeChild(frame);
             });
         }
         else if ( platform === "android" ) { // with Android
-            define(SmallBridge, "sendMessage", function(data) {
-                win.prompt(data);
+            define(SmallBridge, "sendMessage", function(type, data, callback) {
+                var callbackId;
+                if ( typeof callback === "function" ) {
+                    callbackId = registerCallback(type, callback);
+                }
+
+                win.prompt(JSON.stringify({
+                    type: type,
+                    data: data,
+                    callbackId: callbackId
+                }));
             });
         }
     });
 
-    define(SmallBridge, "addMessageListener", function(listener) {
-        define(SmallBridge, "_listener", listener);
-    });
-
-    define(SmallBridge, "messageCallback", function(source, data) {
-        SmallBridge._listener(source, data);
+    define(SmallBridge, "_receive", function(type, id, result) {
+        callbacks[type][id](result);
     });
 
     define(win, "SmallBridge", SmallBridge);
