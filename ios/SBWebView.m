@@ -25,10 +25,11 @@
     id callback = [self.listenerRegistry objectForKey:type];
 
     // FIXME
-    if ( callback is block ) {
-        callback(source, data, result);
+    if ( callback is NSDictionary ) {
+        // performSelector SEL to target
     }
     else {
+        callback(source, data, result);
     }
 }
 
