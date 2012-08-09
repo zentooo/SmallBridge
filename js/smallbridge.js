@@ -38,7 +38,6 @@
                 }
 
                 frame.src = baseUri + JSON.stringify({
-                    internalType: "send",
                     type: type,
                     data: data,
                     callbackId: callbackId
@@ -55,7 +54,6 @@
                 }
 
                 win.prompt(JSON.stringify({
-                    internalType: "send",
                     type: type,
                     data: data,
                     callbackId: callbackId

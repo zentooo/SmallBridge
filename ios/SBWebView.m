@@ -32,15 +32,14 @@
     }
 }
 
-- (void)sendMessage:(NSBundle *)bundle withData:(NSString *)data
-{
-    NSString* bundleId = [bundle bundleIdentifier];
-    NSString* jsString = [NSString stringWithFormat:@"SmallBridge.messageCallback(\"%@\", \"%@\");", bundleId, data];
-    [self stringByEvaluatingJavaScriptFromString: jsString];
-}
-
 -(BOOL) addMessageListener:(NSString *)type withCallback:(MessageListenerBlock)callback
 {
+    [self.listenerRegistry setObject:callback forKey:type];
+}
+
+-(BOOL) addMessageListener:(NSString *)type target:(id)target selector:(SEL)selector
+{
+    NSDictionary* callback = nil; // FIXME: set target and selector
     [self.listenerRegistry setObject:callback forKey:type];
 }
 

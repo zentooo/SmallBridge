@@ -7,10 +7,14 @@
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("one").addEventListener("click", function() {
-                SmallBridge.sendMessage("hoge", { foo: 1, bar: 2 }, function(result) {
+
+                SmallBridge.sendMessage("hoge", { foo: 1, bar: 2 });
+
+                SmallBridge.sendMessage("hoge", { foo: 1, bar: 2 }, function(err, result) {
                     alert(result.foo);
                     alert(result.bar);
                 });
+
             });
         }, false);
     </script>
