@@ -62,8 +62,8 @@
         }
     });
 
-    define(SmallBridge, "_receive", function(type, id, result) {
-        callbacks[type][id](result);
+    define(SmallBridge, "_receive", function(type, id, error, result) {
+        callbacks[type][id](error, result);
         delete callbacks[type][id];
     });
 

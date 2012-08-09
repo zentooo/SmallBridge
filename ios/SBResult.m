@@ -24,9 +24,26 @@
     return self;
 }
 
--(void) obtain:(NSDictionary *)data
+-(void) obtain:(NSDictionary *)data error:(NSError *)error
 {
-    NSString* jsString = [NSString stringWithFormat:@"SmallBridge._receive('%@', %@, %@);", self.type, self.callbackId, [self.jsonWriter stringWithObject:data]];
+    NSString* jsString;
+
+    if ( error == nil ) {
+        NSString* jsString = [NSString stringWithFormat:@"SmallBridge._receive('%@', %@, void 0, %@);",
+            self.type,
+            self.callbackId,
+            [self.jsonWriter stringWithObject:data]
+        ];
+    }
+    else {
+        NSString* jsString = [NSString stringWithFormat:@"SmallBridge._receive('%@', %@, %@, %@);",
+            self.type,
+            self.callbackId,
+            [error localizedDescription],
+            [self.jsonWriter stringWithObject:data]
+        ];
+    }
+
     [self.webView stringByEvaluatingJavaScriptFromString:jsString];
 }
 

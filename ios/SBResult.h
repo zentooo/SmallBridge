@@ -16,6 +16,6 @@
 @property (strong, nonatomic) NSString *type;
 @property (strong, nonatomic) NSNumber *callbackId;
 
--(void) obtain:(NSDictionary *) data;
+-(void) obtain:(NSDictionary *) data error:(NSError *)error
 
 @end
