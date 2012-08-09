@@ -17,7 +17,7 @@
     if ( self != nil ) {
         self.jsonParser = [[SBJsonParser alloc] init];
     }
-    
+
     return self;
 }
 
@@ -31,7 +31,7 @@
     NSString* url = [[[request URL] absoluteString] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString* sbscheme = @"smallbridge://";
     NSRange range = [url rangeOfString:sbscheme];
-    
+
     if ( range.location == NSNotFound )
     {
         return YES;
@@ -41,19 +41,16 @@
         NSString* source = [[request allHTTPHeaderFields] objectForKey:@"Referer"];
         NSString* jsonMessage = [url substringFromIndex:range.length];
         NSDictionary* message = (NSDictionary *)[self.jsonParser objectWithString:jsonMessage];
-        
+
         SBResult* result = [[SBResult alloc] init];
         result.webView = webView;
         result.type = [message objectForKey:@"type"];
         result.callbackId = [message objectForKey:@"callbackId"];
-        
-        return [self onReceiveMessage:source type:[message objectForKey:@"type"] data:[message objectForKey:@"data"] result:result];
+
+        SBWebView* sbWebView = (SBWebView *)webView;
+        return [sbWebView onReceiveMessage:source type:[message objectForKey:@"type"] data:[message objectForKey:@"data"] result:result];
     }
 }
 
--(BOOL) onReceiveMessage:(NSString *)source type:(NSString *)type data:(NSDictionary *)data result:(SBResult *)result
-{
-    NSLog(@"subclass of SBWebViewDelegate should implement -(BOOL) onReceiveMessage:(NSString *)source type:(NSString *)type data:(NSDictionary *)data result:(SBResult *)result");
-}
 
 @end

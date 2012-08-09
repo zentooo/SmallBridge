@@ -38,6 +38,7 @@
                 }
 
                 frame.src = baseUri + JSON.stringify({
+                    internalType: "send",
                     type: type,
                     data: data,
                     callbackId: callbackId
@@ -54,6 +55,7 @@
                 }
 
                 win.prompt(JSON.stringify({
+                    internalType: "send",
                     type: type,
                     data: data,
                     callbackId: callbackId
@@ -64,6 +66,7 @@
 
     define(SmallBridge, "_receive", function(type, id, result) {
         callbacks[type][id](result);
+        delete callbacks[type][id];
     });
 
     define(win, "SmallBridge", SmallBridge);

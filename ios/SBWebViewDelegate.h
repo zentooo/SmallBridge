@@ -13,6 +13,4 @@
 
 @property (strong, nonatomic) SBJsonParser *jsonParser;
 
--(BOOL) onReceiveMessage:(NSString *)source type:(NSString *)type data:(NSDictionary *)data result:(SBResult *)result;
-
 @end

@@ -7,9 +7,19 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^MessageListenerBlock)(NSString *source, NSDictionary *data, SBResult *result)
+typedef void (^SendMessageResultBlock)(NSDictionary *data)
+
+static int callbackId = 0;
 
 @interface SBWebView : UIWebView
 
--(void) sendMessage:(NSBundle *)bundle withData:(NSString *)data;
+@property (strong, nonatomic) NSDictionary *listenerRegistry;
+
+-(void) sendMessage:(NSString *)type withData:(NSString *)data callback:(SendMessageResultBlock);
+-(void) sendMessage:(NSString *)type withData:(NSString *)data target:(id)target selector:(SEL)selector;
+
+-(BOOL) onReceiveMessage:(NSString *)source type:(NSString *)type data:(NSDictionary *)data result:(SBResult *)result;
+-(BOOL) addMessageListener:(NSString *)type callback:(MessageListenerBlock)callback;
 
 @end
