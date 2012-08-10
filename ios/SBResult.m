@@ -24,22 +24,22 @@
     return self;
 }
 
--(void) obtain:(NSDictionary *)data error:(NSError *)error
+-(void) provide:(NSDictionary *)data error:(NSError *)error
 {
     NSString* jsString;
 
     if ( error == nil ) {
-        NSString* jsString = [NSString stringWithFormat:@"SmallBridge._receive('%@', %@, void 0, %@);",
+        jsString = [NSString stringWithFormat:@"SmallBridge._receive('%@', %@, void 0, %@);",
             self.type,
             self.callbackId,
             [self.jsonWriter stringWithObject:data]
         ];
     }
     else {
-        NSString* jsString = [NSString stringWithFormat:@"SmallBridge._receive('%@', %@, %@, %@);",
+        jsString = [NSString stringWithFormat:@"SmallBridge._receive('%@', %@, %@, %@);",
             self.type,
             self.callbackId,
-            [error localizedDescription],
+            error,
             [self.jsonWriter stringWithObject:data]
         ];
     }

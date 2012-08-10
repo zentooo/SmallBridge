@@ -6,21 +6,23 @@
     <script type="text/javascript" src="smallbridge.js?v=11adso"></script>
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("one").addEventListener("click", function() {
-
-                SmallBridge.sendMessage("hoge", { foo: 1, bar: 2 });
-
-                SmallBridge.sendMessage("hoge", { foo: 1, bar: 2 }, function(err, result) {
+            document.getElementById("hoge").addEventListener("click", function() {
+                SmallBridge.sendMessage("hoge", { foo: "foo", bar: "bar" }, function(err, result) {
                     alert(result.foo);
                     alert(result.bar);
                 });
-
+            });
+            document.getElementById("fuga").addEventListener("click", function() {
+                SmallBridge.sendMessage("fuga", { bar: "bar", baz: "baz" }, function(err, result) {
+                    alert(result.bar);
+                    alert(result.baz);
+                });
             });
         }, false);
     </script>
 </head>
 <body>
-    <button id="one">send "hoge"</button>
-    <button id="two">send ""</button>
+    <button id="hoge">send type="hoge"</button>
+    <button id="fuga">send type="fuga"</button>
 </body>
 </html>

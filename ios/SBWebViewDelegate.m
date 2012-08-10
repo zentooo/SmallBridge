@@ -8,14 +8,19 @@
 #import "SBWebViewDelegate.h"
 
 @implementation SBWebViewDelegate
-
-@synthesize jsonParser;
+{
+    NSString* sbscheme;
+    SBJsonParser *jsonParser;
+    NSMutableDictionary *listeners;
+}
 
 - (id) init
 {
     self = [super init];
     if ( self != nil ) {
-        self.jsonParser = [[SBJsonParser alloc] init];
+        sbscheme = @"smallbridge://";
+        jsonParser = [[SBJsonParser alloc] init];
+        listeners = [[NSMutableDictionary alloc] init];
     }
 
     return self;
@@ -29,7 +34,6 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     NSString* url = [[[request URL] absoluteString] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString* sbscheme = @"smallbridge://";
     NSRange range = [url rangeOfString:sbscheme];
 
     if ( range.location == NSNotFound )
@@ -40,17 +44,58 @@
     {
         NSString* source = [[request allHTTPHeaderFields] objectForKey:@"Referer"];
         NSString* jsonMessage = [url substringFromIndex:range.length];
-        NSDictionary* message = (NSDictionary *)[self.jsonParser objectWithString:jsonMessage];
+        NSDictionary* message = (NSDictionary *)[jsonParser objectWithString:jsonMessage];
 
         SBResult* result = [[SBResult alloc] init];
         result.webView = webView;
         result.type = [message objectForKey:@"type"];
         result.callbackId = [message objectForKey:@"callbackId"];
 
-        SBWebView* sbWebView = (SBWebView *)webView;
-        return [sbWebView onReceiveMessage:source type:[message objectForKey:@"type"] data:[message objectForKey:@"data"] result:result];
+        [self onReceiveMessage:source type:[message objectForKey:@"type"] data:[message objectForKey:@"data"] result:result];
+        return NO;
     }
 }
 
+-(void) onReceiveMessage:(NSString *)source type:(NSString *)type data:(NSDictionary *)data result:(SBResult *)result
+{
+    id callback = [listeners objectForKey:type];
+
+    if ( callback == nil )
+    {
+        return;
+    }
+    else if ( [callback isKindOfClass:[NSDictionary class]] )
+    {
+        NSDictionary *dict = (NSDictionary *)callback;
+        id target = [dict objectForKey:@"target"];
+        SEL selector = NSSelectorFromString([dict objectForKey:@"selector"]);
+        
+        if ( [target respondsToSelector:selector] ) {
+            NSMethodSignature *sig = [target methodSignatureForSelector:selector];
+            NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+            [inv setTarget:target];
+            [inv setSelector:selector];
+            [inv setArgument:&type atIndex:2];
+            [inv setArgument:&data atIndex:3];
+            [inv setArgument:&result atIndex:4];
+            [inv invoke];
+        }
+        
+    }
+    else {
+        ((MessageListenerCallback)callback)(source, data, result);
+    }
+}
+
+-(void) addMessageListener:(NSString *)type callback:(MessageListenerCallback)callback
+{
+    [listeners setObject:callback forKey:type];
+}
+
+-(void) addMessageListener:(NSString *)type target:(id)target selector:(SEL)selector
+{
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:target, @"target", NSStringFromSelector(selector), @"selector", nil];
+    [listeners setObject:dict forKey:type];
+}
 
 @end
