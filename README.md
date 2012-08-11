@@ -1,29 +1,19 @@
 # Interface
 
-## for JavaScript
-    SmallBridge.sendMesage("<string>");
+## for JavaScript / iOS
+## JavaScript side
+    // just send a messaget to native layer
+    SmallBridge.sendMesage("bookmark1", { url: "http://example.com", title: "example" });
 
-    SmallBridge.addMessageListener(function(source, data) {
-        console.log(source); // bundle ID as String
-        console.log(data); // received data as String
-    });
+    // send a messaget with result callback
+    SmallBridge.sendMesage("bookmark2", { url: "http://example.com", title: "example" }, function(err, data) { });
 
-## for iOS
-    -(void) sendMessage:(NSBundle *) withData:(NSString *)data;
+## iOS side
+    // add message listener with Block
+    [self addMessageListener:@"bookmark1" callback:^(NSString *sourceURL, NSDictionary *data, SBResult *result) {
+    }];
 
-    // source is URL of loaded document
-    -(BOOL) onReceiveMessage:(NSString*)source withData:(NSString*)data;
+    // add message listener with delegation
+    [self addMessageListener:@"bookmark2" target:self selector:@selector(onBookmark:data:result:)];
 
 ## for Android
-    public void sendMessage(Context context, String data)
-
-    // source is URL of loaded document
-    public boolean onReceiveMessage(String source, String data)
-
-# How to use
-
-## on JavaScript
-
-## on Android
-
-## on iOS

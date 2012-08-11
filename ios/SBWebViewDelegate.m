@@ -78,7 +78,7 @@
             NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
             [inv setTarget:target];
             [inv setSelector:selector];
-            [inv setArgument:&type atIndex:2];
+            [inv setArgument:&source atIndex:2];
             [inv setArgument:&data atIndex:3];
             [inv setArgument:&result atIndex:4];
             [inv invoke];

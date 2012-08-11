@@ -9,7 +9,7 @@
 #import "SBJson.h"
 #import "SBResult.h"
 
-typedef void (^MessageListenerCallback)(NSString *source, NSDictionary *data, SBResult *result);
+typedef void (^MessageListenerCallback)(NSString *sourceURL, NSDictionary *data, SBResult *result);
 
 @interface SBWebViewDelegate : NSObject <UIWebViewDelegate>
 
