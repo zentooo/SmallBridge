@@ -11,11 +11,7 @@
 
 @interface SBResult : NSObject
 
-@property (strong, nonatomic) SBJsonWriter *jsonWriter;
-@property (strong, nonatomic) UIWebView *webView;
-@property (strong, nonatomic) NSString *type;
-@property (strong, nonatomic) NSNumber *callbackId;
-
+-(id) init:(UIWebView *)webView messageType:(NSString *)messageType callbackId:(NSNumber *)callbackId;
 -(void) provide:(NSDictionary *) data error:(NSError *)error;
 
 @end

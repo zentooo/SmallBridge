@@ -13,9 +13,7 @@ typedef void (^MessageListenerCallback)(NSString *source, NSDictionary *data, SB
 
 @interface SBWebViewDelegate : NSObject <UIWebViewDelegate>
 
--(void) onReceiveMessage:(NSString *)source type:(NSString *)type data:(NSDictionary *)data result:(SBResult *)result;
-
--(void) addMessageListener:(NSString *)type callback:(MessageListenerCallback)callback;
--(void) addMessageListener:(NSString *)type target:(id)target selector:(SEL)selector;
+-(void) addMessageListener:(NSString *)messageType callback:(MessageListenerCallback)callback;
+-(void) addMessageListener:(NSString *)messageType target:(id)target selector:(SEL)selector;
 
 @end

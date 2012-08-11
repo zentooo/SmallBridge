@@ -42,16 +42,19 @@
     }
     else
     {
-        NSString* source = [[request allHTTPHeaderFields] objectForKey:@"Referer"];
-        NSString* jsonMessage = [url substringFromIndex:range.length];
-        NSDictionary* message = (NSDictionary *)[jsonParser objectWithString:jsonMessage];
-
-        SBResult* result = [[SBResult alloc] init];
-        result.webView = webView;
-        result.type = [message objectForKey:@"type"];
-        result.callbackId = [message objectForKey:@"callbackId"];
-
-        [self onReceiveMessage:source type:[message objectForKey:@"type"] data:[message objectForKey:@"data"] result:result];
+        NSString *source = [[request allHTTPHeaderFields] objectForKey:@"Referer"];
+        
+        NSString *jsonMessage = [url substringFromIndex:range.length];
+        NSDictionary *message = (NSDictionary *)[jsonParser objectWithString:jsonMessage];
+        
+        NSString *type = [message objectForKey:@"type"];
+        NSDictionary *data = [message objectForKey:@"data"];
+        NSNumber *callbackId = [message objectForKey:@"callbackId"];
+        
+        SBResult* result = [[SBResult alloc] init:webView messageType:type callbackId:callbackId];
+        
+        [self onReceiveMessage:source type:type data:data result:result];
+        
         return NO;
     }
 }
@@ -97,5 +100,16 @@
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:target, @"target", NSStringFromSelector(selector), @"selector", nil];
     [listeners setObject:dict forKey:type];
 }
+
+#if __has_feature(objc_arc)
+#else
+-(void) dealloc
+{
+    [sbscheme release];
+    [jsonParser release];
+    [listeners release];
+    [super dealloc];
+}
+#endif
 
 @end
